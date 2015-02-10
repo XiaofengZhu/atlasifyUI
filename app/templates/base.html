@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="/static/css/index.css" rel="stylesheet" type="text/css"/>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> 
+
+    {% if title %}
+    <title>{{ title }} - AtlasifyUI</title>
+    {% else %}
+    <title>AtlasifyUI</title>
+    {% endif %}
+  </head>
+
+  <body bgcolor="#F0F0F0" onload="window.searchBox.keyWord.focus();">
+                
+      <form name="searchBox" id = "form" class="searchBar" action="" method="post" >
+          <font class="title">Atlasify</font>
+          <span class="searchWrapper">
+              <input type="text" id ="query" name ="query" placeholder="Search" class="searchBox"/>              
+              <input type="button" id = "button" class="searchButton"/>
+          </span>
+
+          <span class="categoryBackground">
+              <label class="categoryLabel">
+                  <select name="option" id ="option" class="categorySelect">
+                      <option value="1">Earth</option>
+                      <option value="2">Periodic Table</option>
+                      <option value="3">US Senate Seating</option>
+                  </select>
+              </label>
+          </span>
+      </form>
+      <br>
+      <br>  
+      <br>  
+     
+      {% block content %}{% endblock %}
+      
+      <script>
+        $(document).ready(function(){
+            $('#button').click(function() {
+                var query = $('#query').val();
+                var option = $('#option').val();
+                var data ={};
+                data['query'] = query;
+                data ['option'] = option;
+                      
+                $.ajax({
+                    url: '/temp',
+                    data: JSON.stringify(data),
+                    dataType: 'json',
+                    type: 'POST',
+                    contentType: 'application/json;charset=UTF-8',
+                })
+                .done  (function(data) { $("#content").html(data["result"]); })
+                .fail  (function() { alert("Error"); })
+                ;
+            });
+        });
+      </script>   
+  </body>
+
+</html>
